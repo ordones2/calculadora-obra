@@ -1,9 +1,11 @@
-// Tela de resultado: faixa min–max, orçamento, cronograma e proposta (PDF via
-// impressão do navegador).
+// Tela de resultado (gate de lead). Na TELA mostra uma visão enxuta — faixa,
+// prazo, curva de desembolso e CTAs (isca). A quebra de custo/BDI vai só para o
+// PDF (blocos .print-only). O PDF é gerado pela impressão do navegador.
 
 import { esc, qs } from "../dom.js";
 import { formatBRL, formatFaixa } from "../format.js";
 import { loadInput } from "../inputStore.js";
+import { loadLead } from "../leadStore.js";
 import { calcular } from "../engine.js";
 
 const NIVEL_LABEL = {
@@ -15,19 +17,18 @@ const NIVEL_LABEL = {
 export function renderResultado(root, app) {
   const c = app.config;
   const input = loadInput();
+  const lead = loadLead();
 
-  if (!input) {
-    root.innerHTML = `
-      <div class="empty">
-        <p class="muted">Nenhuma simulação encontrada.</p>
-        <a href="#/" class="btn-primary">Fazer uma simulação</a>
-      </div>`;
+  // Gate: o preço só é acessível após completar o funil + contato.
+  if (!input || !lead) {
+    app.navigate("#/");
     return;
   }
 
   const r = calcular(c, input);
   const linhas = r.nivel === "porAmbiente" ? r.porAmbiente : r.porCategoria;
   const tituloLista = r.nivel === "porAmbiente" ? "Por ambiente" : "Por categoria";
+  const primeiroNome = (lead.nome || "").split(" ")[0];
 
   const linhasHtml = linhas
     .map(
@@ -53,34 +54,27 @@ export function renderResultado(root, app) {
     })
     .join("");
 
+  const whatsMsg = `Olá! Sou ${lead.nome || ""}. Fiz a simulação da minha reforma (${formatFaixa(r.faixa.min, r.faixa.max)}) e gostaria de conversar.`;
+
   root.innerHTML = `
     <div class="stack-lg">
       <div class="row-between no-print">
-        <h1>Sua estimativa</h1>
+        <h1>${primeiroNome ? `Pronto, ${esc(primeiroNome)}!` : "Sua estimativa"}</h1>
         <a href="#/" class="btn-secondary">← Refazer</a>
       </div>
 
-      <!-- Cabeçalho da proposta (aparece na impressão/PDF) -->
+      <!-- Cabeçalho da proposta (só na impressão/PDF) -->
       <div class="proposta-head print-only">
         ${c.marca.logoUrl ? `<img class="proposta-logo" src="${esc(c.marca.logoUrl)}" alt="${esc(c.marca.nome)}" />` : ""}
         <strong>${esc(c.marca.nome || "Proposta de Reforma")}</strong>
         <span>${esc(c.marca.contato.email)} · ${esc(c.marca.contato.telefone)}</span>
+        ${lead.nome ? `<span>Cliente: ${esc(lead.nome)}${lead.whatsapp ? ` · ${esc(lead.whatsapp)}` : ""}</span>` : ""}
       </div>
 
       <section class="card faixa">
-        <p class="muted">Faixa estimada de investimento</p>
+        <p class="muted">Faixa estimada de investimento da sua reforma</p>
         <p class="faixa-valor">${formatFaixa(r.faixa.min, r.faixa.max)}</p>
-        <p class="muted small">${NIVEL_LABEL[r.nivel]} · valor central ${formatBRL(r.total)} · prazo aprox. ${r.cronograma.prazoDias} dias</p>
-      </section>
-
-      <section class="card">
-        <h2>${tituloLista}</h2>
-        <ul class="lista">${linhasHtml}</ul>
-        <div class="totais">
-          <div><span>Custo direto</span><span>${formatBRL(r.subtotalDireto)}</span></div>
-          <div><span>BDI (${c.bdi.percentual}%)</span><span>${formatBRL(r.bdiValor)}</span></div>
-          <div class="total"><span>Total estimado</span><span>${formatBRL(r.total)}</span></div>
-        </div>
+        <p class="muted small">${NIVEL_LABEL[r.nivel]} · prazo aproximado de ${r.cronograma.prazoDias} dias</p>
       </section>
 
       <section class="card">
@@ -90,16 +84,28 @@ export function renderResultado(root, app) {
         <ul class="lista">${fasesHtml}</ul>
       </section>
 
-      <div class="actions-end no-print">
-        <button id="imprimir" class="btn-primary">Baixar proposta (PDF)</button>
-        ${
-          c.marca.contato.whatsapp
-            ? `<a class="btn-secondary" target="_blank" rel="noreferrer"
-                 href="https://wa.me/${esc(c.marca.contato.whatsapp)}?text=${encodeURIComponent(
-                "Olá! Fiz uma simulação de reforma e gostaria de conversar."
-              )}">Falar com o arquiteto</a>`
-            : ""
-        }
+      <!-- Detalhamento de custo: só no PDF / uso interno -->
+      <section class="card print-only">
+        <h2>${tituloLista}</h2>
+        <ul class="lista">${linhasHtml}</ul>
+        <div class="totais">
+          <div><span>Custo direto</span><span>${formatBRL(r.subtotalDireto)}</span></div>
+          <div><span>BDI (${c.bdi.percentual}%)</span><span>${formatBRL(r.bdiValor)}</span></div>
+          <div class="total"><span>Total estimado</span><span>${formatBRL(r.total)}</span></div>
+        </div>
+      </section>
+
+      <div class="cta-final no-print">
+        <p>Quer transformar essa estimativa em um projeto? Fale com o arquiteto.</p>
+        <div class="actions">
+          ${
+            c.marca.contato.whatsapp
+              ? `<a class="btn-primary" target="_blank" rel="noreferrer"
+                   href="https://wa.me/${esc(c.marca.contato.whatsapp)}?text=${encodeURIComponent(whatsMsg)}">Falar com o arquiteto</a>`
+              : ""
+          }
+          <button id="imprimir" class="btn-secondary">Baixar proposta (PDF)</button>
+        </div>
       </div>
 
       <p class="muted small disclaimer">

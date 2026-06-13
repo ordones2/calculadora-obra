@@ -94,14 +94,23 @@ O motor recebe esse objeto + o input do wizard e devolve o resultado.
 
 ## 7. Telas
 
-### Cliente — wizard (`/`)
-1. **Projeto**: tipo de imóvel/área total, tipo de reforma, complexidade, condição, região.
-2. **Padrão de acabamento**: cards econômico/médio/alto/luxo.
-3. **Ambientes** (opcional): seleção + área por ambiente.
-4. **Itens detalhados** (opcional/avançado): serviços + quantidades; ativa o nível detalhado.
-5. **Prévia ao vivo**: faixa estimada atualizada conforme o cliente preenche.
-6. **Resultado** (`/resultado`): faixa, orçamento, cronograma com curva de desembolso (S em
-   SVG) + barras por fase, PDF e contato.
+### Cliente — wizard (`/`) — funil faseado e gamificado (isca de leads)
+Uma pergunta por etapa, com barra de progresso, ícones Lucide (`js/icons.js`), cards
+selecionáveis com auto-avanço e transições. **O preço NÃO aparece aqui.** Etapas:
+1. **Intro** (hero) — "Começar".
+2. **Tipo de reforma** (cards).
+3. **Área total** (input grande + chips).
+4. **Padrão de acabamento** (cards; sem mostrar R$/m²).
+5. **Ambientes** (opcional, multi-seleção + área).
+6. **Detalhes do imóvel** (condição/complexidade/região).
+7. **Itens detalhados** (opcional/avançado, pulável; ativa o nível detalhado).
+8. **Contato — lead gate** (nome*, WhatsApp*, e-mail): libera o resultado.
+
+### Resultado (`/resultado`) — protegido por gate
+Só acessível após completar o funil + contato (`loadInput()` + `loadLead()`); caso contrário
+redireciona para o início. **Visão enxuta na tela** (isca): saudação com o nome, **faixa**,
+**prazo + curva de desembolso** (S em SVG) e **CTAs** (WhatsApp + baixar PDF). A **quebra de
+custo direto/BDI e orçamento por categoria** vai só para o **PDF** (`.print-only`).
 
 ### Admin / CMS (`/admin`)
 - Edição de **marca**, **padrões (R$/m²)**, **BDI**.
@@ -120,8 +129,12 @@ O motor recebe esse objeto + o input do wizard e devolve o resultado.
   adicionar/remover), sem precisar editar JSON cru.
 - **Fase 3 (entregue)**: nível "itens detalhados" na UI do cliente (serviços + quantidades) e
   gráfico da curva de desembolso (curva S em SVG) + barras de custo por fase.
-- **Fase 4**: captura de lead com backend/CRM, autenticação do admin, multiusuário e/ou CMS
-  externo (headless), histórico de simulações.
+- **Fase UX (entregue)**: funil faseado e gamificado (ícones Lucide inline, barra de
+  progresso, cards com auto-avanço), **lead gate** (preço só após contato), resultado enxuto na
+  tela com detalhamento só no PDF. Captura de lead é só de UI + `sessionStorage`
+  (`js/leadStore.js`); a entrega real fica para a Fase 4.
+- **Fase 4**: entrega do lead (WhatsApp pré-preenchido/Formspree/CRM), autenticação do admin,
+  multiusuário e/ou CMS externo (headless), histórico de simulações.
 
 ## 9. Como rodar e verificar
 
