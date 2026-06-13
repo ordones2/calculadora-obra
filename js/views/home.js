@@ -16,11 +16,15 @@ const ICONE_AMBIENTE = {
   banheiro: "droplet",
   suite: "bed",
   sala: "sofa",
-  lavabo: "droplet",
+  lavabo: "droplets",
   "area-servico": "washing-machine",
   "area-externa": "trees",
 };
 const iconeAmb = (id) => ICONE_AMBIENTE[id] || "door-open";
+
+// Ícones distintos por nível de padrão (sem repetir).
+const ICONE_PADRAO = { economico: "wallet", medio: "gem", alto: "sparkles", luxo: "crown" };
+const iconePadrao = (p) => ICONE_PADRAO[p.id] || "gem";
 
 // Perfis pré-configurados: [ambienteId, área m²] (ids de config.ambientes).
 const PERFIS = {
@@ -125,7 +129,7 @@ export function renderHome(root, app) {
       avancarOcultar: true,
       body: () => `
         <div class="step-hero">
-          <span class="hero-ic">${icon("sparkles", { size: 30 })}</span>
+          <span class="hero-ic">${icon("calculator", { size: 30 })}</span>
           <p class="hero-eyebrow">Calculadora de reforma</p>
           <h1 class="hero-title">Descubra o investimento da sua reforma</h1>
           <p class="hero-sub">Em poucos minutos você recebe uma estimativa de custo, prazo e proposta — sem visita técnica. Comece escolhendo o perfil do imóvel:</p>
@@ -161,7 +165,7 @@ export function renderHome(root, app) {
       },
     },
     {
-      icon: "home",
+      icon: "door-open",
       titulo: "Confira os ambientes",
       subtitulo: "Ajuste a área de cada ambiente, adicione ou remova. Já preenchemos com tamanhos típicos.",
       body: () => `
@@ -202,7 +206,7 @@ export function renderHome(root, app) {
       titulo: "Qual padrão de acabamento?",
       subtitulo: "Define a qualidade dos materiais e do acabamento.",
       auto: "padraoId",
-      body: () => cardsUnicos("padraoId", c.padroes, () => "gem"),
+      body: () => cardsUnicos("padraoId", c.padroes, iconePadrao),
       validate: () => (respostas.padraoId ? null : "Escolha um padrão para continuar."),
     },
     {
@@ -229,7 +233,7 @@ export function renderHome(root, app) {
       },
     },
     {
-      icon: "building-2",
+      icon: "hammer",
       titulo: "Sobre a obra",
       subtitulo: "Esses detalhes ajustam a estimativa à sua realidade.",
       body: () => `
@@ -242,7 +246,7 @@ export function renderHome(root, app) {
       commit: () => qsa(root, "[data-field]").forEach((sel) => (respostas[sel.dataset.field] = sel.value)),
     },
     {
-      icon: "user-round",
+      icon: "message-circle",
       titulo: "Falta só 1 passo para ver sua estimativa 🎉",
       subtitulo: "Deixe seu contato para liberar a estimativa e a proposta.",
       avancar: "Ver minha estimativa",
