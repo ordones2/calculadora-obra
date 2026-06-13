@@ -90,6 +90,31 @@ export function renderHome(root, app) {
         </div>
       </section>
 
+      <details class="card">
+        <summary>4. Itens detalhados <span class="muted small">(avançado — orçamento por serviço)</span></summary>
+        <p class="muted small" style="margin:.75rem 0">
+          Ao detalhar itens, a estimativa passa a usar estes serviços (modo mais preciso, faixa mais estreita).
+        </p>
+        <div class="grid-3" id="itens">
+          ${c.servicos
+            .map(
+              (s) => `
+            <div class="ambiente" data-servico="${esc(s.id)}">
+              <label class="check">
+                <input type="checkbox" class="serv-check" />
+                <span>${esc(s.nome)}</span>
+              </label>
+              <div class="serv-qtd hidden">
+                <span class="muted small">Qtd</span>
+                <input type="number" class="serv-input" min="0" value="1" />
+                <span class="muted small">${esc(s.unidade)}</span>
+              </div>
+            </div>`
+            )
+            .join("")}
+        </div>
+      </details>
+
       <section class="card preview">
         <div>
           <p class="muted small">Prévia da estimativa</p>
@@ -111,6 +136,14 @@ export function renderHome(root, app) {
         area: Number(qs(row, ".amb-input").value) || 0,
       }));
 
+    const itens = qsa(root, "[data-servico]")
+      .filter((row) => qs(row, ".serv-check").checked)
+      .map((row) => ({
+        servicoId: row.dataset.servico,
+        quantidade: Number(qs(row, ".serv-input").value) || 0,
+      }))
+      .filter((it) => it.quantidade > 0);
+
     return {
       areaTotal: Number(qs(root, "#areaTotal").value) || 0,
       padraoId,
@@ -119,6 +152,7 @@ export function renderHome(root, app) {
       condicaoImovelId: qs(root, "#condicaoImovelId").value,
       regiaoId: qs(root, "#regiaoId").value,
       ambientes: ambientes.length ? ambientes : undefined,
+      itens: itens.length ? itens : undefined,
     };
   }
 
@@ -153,11 +187,21 @@ export function renderHome(root, app) {
     });
   });
 
-  qsa(root, ".ambiente").forEach((row) => {
+  qsa(root, "[data-ambiente]").forEach((row) => {
     const check = qs(row, ".amb-check");
     const area = qs(row, ".amb-area");
     check.addEventListener("change", () => {
       area.classList.toggle("hidden", !check.checked);
+      row.classList.toggle("selected", check.checked);
+      atualizarPreview();
+    });
+  });
+
+  qsa(root, "[data-servico]").forEach((row) => {
+    const check = qs(row, ".serv-check");
+    const qtd = qs(row, ".serv-qtd");
+    check.addEventListener("change", () => {
+      qtd.classList.toggle("hidden", !check.checked);
       row.classList.toggle("selected", check.checked);
       atualizarPreview();
     });

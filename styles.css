@@ -137,6 +137,20 @@ input:focus, select:focus, textarea:focus {
 .totais > div { display: flex; justify-content: space-between; padding: .15rem 0; color: var(--muted); }
 .totais .total { font-weight: 700; color: var(--ink); }
 .disclaimer { margin-top: 1rem; }
+
+/* Cronograma: barras por fase */
+.fase { display: block; }
+.fase-top { display: flex; justify-content: space-between; gap: 1rem; }
+.barra { background: #f1ede7; height: 6px; border-radius: 3px; overflow: hidden; margin: .4rem 0 .2rem; }
+.barra span { display: block; height: 100%; background: var(--accent); }
+
+/* Gráfico da curva de desembolso (SVG) */
+.chart { width: 100%; height: auto; margin: .5rem 0 1rem; }
+.chart .grid { stroke: #efece8; stroke-width: 1; }
+.chart .axis { fill: #a8a29e; font-size: 10px; }
+.chart .area { fill: var(--accent); opacity: .14; }
+.chart .curve { fill: none; stroke: var(--accent); stroke-width: 2; }
+.chart .dot { fill: var(--accent); }
 .empty { text-align: center; padding: 3rem 0; display: flex; flex-direction: column; gap: 1rem; align-items: center; }
 
 /* Admin */

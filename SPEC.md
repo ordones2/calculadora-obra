@@ -98,9 +98,10 @@ O motor recebe esse objeto + o input do wizard e devolve o resultado.
 1. **Projeto**: tipo de imóvel/área total, tipo de reforma, complexidade, condição, região.
 2. **Padrão de acabamento**: cards econômico/médio/alto/luxo.
 3. **Ambientes** (opcional): seleção + área por ambiente.
-4. **Itens detalhados** (opcional/avançado — *fase futura na UI*).
+4. **Itens detalhados** (opcional/avançado): serviços + quantidades; ativa o nível detalhado.
 5. **Prévia ao vivo**: faixa estimada atualizada conforme o cliente preenche.
-6. **Resultado** (`/resultado`): faixa, orçamento, cronograma, PDF e contato.
+6. **Resultado** (`/resultado`): faixa, orçamento, cronograma com curva de desembolso (S em
+   SVG) + barras por fase, PDF e contato.
 
 ### Admin / CMS (`/admin`)
 - Edição de **marca**, **padrões (R$/m²)**, **BDI**.
@@ -117,8 +118,8 @@ O motor recebe esse objeto + o input do wizard e devolve o resultado.
   cor da marca, logo e cor no PDF (impressão).
 - **Fase 2 (entregue)**: edição estruturada de ambientes e serviços no admin (tabelas com
   adicionar/remover), sem precisar editar JSON cru.
-- **Fase 3**: nível "itens detalhados" na UI do cliente + sugestão de quantidades por
-  ambiente; gráfico da curva de desembolso.
+- **Fase 3 (entregue)**: nível "itens detalhados" na UI do cliente (serviços + quantidades) e
+  gráfico da curva de desembolso (curva S em SVG) + barras de custo por fase.
 - **Fase 4**: captura de lead com backend/CRM, autenticação do admin, multiusuário e/ou CMS
   externo (headless), histórico de simulações.
 
