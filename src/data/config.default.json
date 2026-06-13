@@ -1,0 +1,180 @@
+{
+  "meta": {
+    "moeda": "BRL",
+    "versaoTabela": "2026-06",
+    "atualizadoEm": "2026-06-13"
+  },
+  "marca": {
+    "nome": "Seu Escritório de Arquitetura",
+    "logoUrl": "",
+    "cor": "#b08d57",
+    "contato": {
+      "email": "contato@seuescritorio.com.br",
+      "telefone": "(11) 0000-0000",
+      "whatsapp": "5511999999999"
+    }
+  },
+  "padroes": [
+    {
+      "id": "economico",
+      "nome": "Econômico",
+      "valorM2": 1800,
+      "descricao": "Acabamentos de boa relação custo-benefício, marcas de entrada."
+    },
+    {
+      "id": "medio",
+      "nome": "Médio",
+      "valorM2": 2800,
+      "descricao": "Acabamentos de marcas consolidadas, bom padrão de revestimentos."
+    },
+    {
+      "id": "alto",
+      "nome": "Alto",
+      "valorM2": 4200,
+      "descricao": "Porcelanatos de grande formato, marcenaria planejada, louças e metais premium."
+    },
+    {
+      "id": "luxo",
+      "nome": "Luxo",
+      "valorM2": 6500,
+      "descricao": "Pedras naturais, marcenaria sob medida, automação e importados."
+    }
+  ],
+  "fatores": {
+    "tipoReforma": [
+      { "id": "cosmetica", "nome": "Cosmética (pintura, pequenos reparos)", "mult": 0.7 },
+      { "id": "parcial", "nome": "Parcial (alguns ambientes)", "mult": 1.0 },
+      { "id": "completa", "nome": "Completa (todo o imóvel)", "mult": 1.35 }
+    ],
+    "complexidade": [
+      { "id": "baixa", "nome": "Baixa", "mult": 0.9 },
+      { "id": "media", "nome": "Média", "mult": 1.0 },
+      { "id": "alta", "nome": "Alta (estrutural, layout novo)", "mult": 1.25 }
+    ],
+    "condicaoImovel": [
+      { "id": "novo", "nome": "Novo / na planta", "mult": 0.95 },
+      { "id": "usado", "nome": "Usado em bom estado", "mult": 1.0 },
+      { "id": "antigo", "nome": "Antigo (instalações p/ refazer)", "mult": 1.15 }
+    ],
+    "regiao": [
+      { "id": "sp-capital", "nome": "São Paulo - Capital", "mult": 1.1 },
+      { "id": "rj-capital", "nome": "Rio de Janeiro - Capital", "mult": 1.08 },
+      { "id": "interior-sp", "nome": "Interior de SP", "mult": 1.0 },
+      { "id": "sul", "nome": "Região Sul", "mult": 0.98 },
+      { "id": "outras", "nome": "Outras regiões", "mult": 1.0 }
+    ]
+  },
+  "ambientes": [
+    {
+      "id": "cozinha",
+      "nome": "Cozinha",
+      "valorM2PorPadrao": { "economico": 2600, "medio": 3900, "alto": 5800, "luxo": 9000 },
+      "servicosSugeridos": ["demolicao", "hidraulica", "eletrica", "revestimento-piso", "revestimento-parede", "marcenaria", "pintura", "gesso"]
+    },
+    {
+      "id": "banheiro",
+      "nome": "Banheiro",
+      "valorM2PorPadrao": { "economico": 2800, "medio": 4200, "alto": 6500, "luxo": 10000 },
+      "servicosSugeridos": ["demolicao", "hidraulica", "eletrica", "impermeabilizacao", "revestimento-piso", "revestimento-parede", "loucas-metais", "marcenaria"]
+    },
+    {
+      "id": "suite",
+      "nome": "Suíte / Dormitório",
+      "valorM2PorPadrao": { "economico": 1500, "medio": 2300, "alto": 3500, "luxo": 5500 },
+      "servicosSugeridos": ["eletrica", "revestimento-piso", "pintura", "gesso", "marcenaria", "esquadrias"]
+    },
+    {
+      "id": "sala",
+      "nome": "Sala (estar/jantar)",
+      "valorM2PorPadrao": { "economico": 1400, "medio": 2200, "alto": 3400, "luxo": 5200 },
+      "servicosSugeridos": ["eletrica", "revestimento-piso", "pintura", "gesso", "marcenaria"]
+    },
+    {
+      "id": "lavabo",
+      "nome": "Lavabo",
+      "valorM2PorPadrao": { "economico": 2500, "medio": 3800, "alto": 6000, "luxo": 9500 },
+      "servicosSugeridos": ["demolicao", "hidraulica", "revestimento-piso", "revestimento-parede", "loucas-metais"]
+    },
+    {
+      "id": "area-servico",
+      "nome": "Área de serviço / lavanderia",
+      "valorM2PorPadrao": { "economico": 1800, "medio": 2600, "alto": 3800, "luxo": 5500 },
+      "servicosSugeridos": ["hidraulica", "eletrica", "revestimento-piso", "revestimento-parede", "marcenaria"]
+    },
+    {
+      "id": "area-externa",
+      "nome": "Área externa / varanda",
+      "valorM2PorPadrao": { "economico": 1600, "medio": 2500, "alto": 4000, "luxo": 6500 },
+      "servicosSugeridos": ["impermeabilizacao", "revestimento-piso", "eletrica", "esquadrias"]
+    }
+  ],
+  "servicos": [
+    { "id": "demolicao", "nome": "Demolição e remoção de entulho", "categoria": "Preliminares", "unidade": "m2", "valorUnitario": 90 },
+    { "id": "alvenaria", "nome": "Alvenaria / vedação", "categoria": "Estrutura e vedação", "unidade": "m2", "valorUnitario": 160 },
+    { "id": "hidraulica", "nome": "Instalações hidráulicas", "categoria": "Instalações", "unidade": "ponto", "valorUnitario": 320 },
+    { "id": "eletrica", "nome": "Instalações elétricas", "categoria": "Instalações", "unidade": "ponto", "valorUnitario": 190 },
+    { "id": "impermeabilizacao", "nome": "Impermeabilização", "categoria": "Instalações", "unidade": "m2", "valorUnitario": 120 },
+    {
+      "id": "revestimento-piso",
+      "nome": "Revestimento de piso",
+      "categoria": "Revestimentos",
+      "unidade": "m2",
+      "valorUnitario": 220,
+      "valorPorPadrao": { "economico": 150, "medio": 240, "alto": 420, "luxo": 800 }
+    },
+    {
+      "id": "revestimento-parede",
+      "nome": "Revestimento de parede",
+      "categoria": "Revestimentos",
+      "unidade": "m2",
+      "valorUnitario": 200,
+      "valorPorPadrao": { "economico": 130, "medio": 220, "alto": 400, "luxo": 750 }
+    },
+    { "id": "pintura", "nome": "Pintura", "categoria": "Acabamentos", "unidade": "m2", "valorUnitario": 55 },
+    { "id": "gesso", "nome": "Gesso / forro / sanca", "categoria": "Acabamentos", "unidade": "m2", "valorUnitario": 130 },
+    {
+      "id": "marcenaria",
+      "nome": "Marcenaria sob medida",
+      "categoria": "Marcenaria",
+      "unidade": "m2",
+      "valorUnitario": 1800,
+      "valorPorPadrao": { "economico": 1100, "medio": 1800, "alto": 3000, "luxo": 5000 }
+    },
+    {
+      "id": "esquadrias",
+      "nome": "Esquadrias (portas/janelas)",
+      "categoria": "Esquadrias",
+      "unidade": "un",
+      "valorUnitario": 1500,
+      "valorPorPadrao": { "economico": 900, "medio": 1500, "alto": 2800, "luxo": 5000 }
+    },
+    {
+      "id": "loucas-metais",
+      "nome": "Louças e metais",
+      "categoria": "Acabamentos",
+      "unidade": "un",
+      "valorUnitario": 1200,
+      "valorPorPadrao": { "economico": 600, "medio": 1200, "alto": 2500, "luxo": 5000 }
+    }
+  ],
+  "bdi": {
+    "percentual": 25,
+    "descricao": "BDI (custos indiretos, administração, impostos e margem) sobre o custo direto."
+  },
+  "incerteza": {
+    "estimativaRapida": { "min": -0.2, "max": 0.25 },
+    "porAmbiente": { "min": -0.12, "max": 0.15 },
+    "detalhado": { "min": -0.07, "max": 0.1 }
+  },
+  "cronograma": {
+    "produtividadeM2PorDia": 1.5,
+    "fases": [
+      { "id": "projeto-canteiro", "nome": "Projeto executivo e canteiro", "pesoCusto": 0.05, "pesoPrazo": 0.1 },
+      { "id": "demolicao", "nome": "Demolição", "pesoCusto": 0.08, "pesoPrazo": 0.1 },
+      { "id": "infra", "nome": "Infraestrutura (hidráulica/elétrica)", "pesoCusto": 0.22, "pesoPrazo": 0.25 },
+      { "id": "revestimentos", "nome": "Revestimentos", "pesoCusto": 0.3, "pesoPrazo": 0.25 },
+      { "id": "acabamentos", "nome": "Acabamentos e marcenaria", "pesoCusto": 0.25, "pesoPrazo": 0.2 },
+      { "id": "limpeza-entrega", "nome": "Limpeza e entrega", "pesoCusto": 0.1, "pesoPrazo": 0.1 }
+    ]
+  }
+}
