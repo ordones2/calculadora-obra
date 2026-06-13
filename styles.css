@@ -116,6 +116,17 @@ input:focus, select:focus, textarea:focus {
 .amb-area { display: flex; align-items: center; gap: .4rem; margin-top: .5rem; }
 .amb-area input { width: 80px; }
 
+/* Validação */
+.erro { color: #b91c1c; font-size: .8rem; }
+
+/* Prévia ao vivo (wizard) */
+.preview {
+  display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+  background: var(--accent-soft); border-color: var(--accent);
+  position: sticky; bottom: 1rem; flex-wrap: wrap;
+}
+.preview-faixa { font-size: 1.5rem; font-weight: 700; color: var(--accent); margin: .2rem 0; }
+
 /* Resultado */
 .faixa { text-align: center; }
 .faixa-valor { font-size: 2rem; font-weight: 700; color: var(--accent); margin: .5rem 0; }
@@ -153,5 +164,7 @@ details.card summary { cursor: pointer; font-weight: 600; }
   }
   .proposta-head strong { color: var(--accent); font-size: 1.3rem; }
   .proposta-head span { color: var(--muted); font-size: .8rem; }
+  .proposta-logo { max-height: 56px; max-width: 200px; object-fit: contain; margin-bottom: .4rem; }
   .faixa { text-align: left; }
+  .preview { display: none !important; }
 }

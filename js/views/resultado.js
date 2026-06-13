@@ -58,6 +58,7 @@ export function renderResultado(root, app) {
 
       <!-- Cabeçalho da proposta (aparece na impressão/PDF) -->
       <div class="proposta-head print-only">
+        ${c.marca.logoUrl ? `<img class="proposta-logo" src="${esc(c.marca.logoUrl)}" alt="${esc(c.marca.nome)}" />` : ""}
         <strong>${esc(c.marca.nome || "Proposta de Reforma")}</strong>
         <span>${esc(c.marca.contato.email)} · ${esc(c.marca.contato.telefone)}</span>
       </div>

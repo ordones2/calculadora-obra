@@ -31,6 +31,8 @@ export function renderAdmin(root, app) {
           <label class="field"><span>E-mail</span><input data-contato="email" value="${esc(c.marca.contato.email)}" /></label>
           <label class="field"><span>Telefone</span><input data-contato="telefone" value="${esc(c.marca.contato.telefone)}" /></label>
           <label class="field"><span>WhatsApp (só dígitos)</span><input data-contato="whatsapp" value="${esc(c.marca.contato.whatsapp)}" /></label>
+          <label class="field"><span>Logo (URL da imagem)</span><input data-marca="logoUrl" value="${esc(c.marca.logoUrl)}" placeholder="https://..." /></label>
+          <label class="field"><span>Cor da marca</span><input id="marca-cor" type="color" value="${esc(c.marca.cor || "#b08d57")}" /></label>
         </div>
       </section>
 
@@ -97,6 +99,13 @@ export function renderAdmin(root, app) {
     const next = structuredClone(app.config);
     next.bdi.percentual = Number(e.target.value) || 0;
     app.setConfigSilent(next);
+  });
+  qs(root, "#marca-cor").addEventListener("input", (e) => {
+    const next = structuredClone(app.config);
+    next.marca.cor = e.target.value;
+    app.setConfigSilent(next);
+    // prévia de tema ao vivo
+    document.documentElement.style.setProperty("--accent", e.target.value);
   });
 
   // Ações

@@ -1,8 +1,10 @@
 // Wizard do cliente: projeto + padrão + ambientes (opcional) -> resultado.
+// Fase 1: validações inline + prévia da estimativa ao vivo.
 
 import { esc, qs, qsa } from "../dom.js";
-import { formatBRL } from "../format.js";
+import { formatBRL, formatFaixa } from "../format.js";
 import { saveInput } from "../inputStore.js";
+import { calcular } from "../engine.js";
 
 function selectOptions(opcoes, selectedId) {
   return opcoes
@@ -30,6 +32,7 @@ export function renderHome(root, app) {
           <label class="field">
             <span>Área total (m²)</span>
             <input id="areaTotal" type="number" min="1" value="80" />
+            <small class="erro hidden" data-erro="areaTotal">Informe uma área maior que zero.</small>
           </label>
           <label class="field">
             <span>Tipo de reforma</span>
@@ -87,19 +90,66 @@ export function renderHome(root, app) {
         </div>
       </section>
 
-      <div class="actions-end">
-        <button id="calcular" class="btn-primary">Calcular estimativa</button>
-      </div>
+      <section class="card preview">
+        <div>
+          <p class="muted small">Prévia da estimativa</p>
+          <p class="preview-faixa" id="preview-faixa">—</p>
+          <p class="muted small" id="preview-detalhe"></p>
+        </div>
+        <button id="calcular" class="btn-primary">Ver estimativa completa</button>
+      </section>
     </div>
   `;
 
   let padraoId = padraoInicial;
+
+  function readInput() {
+    const ambientes = qsa(root, ".ambiente")
+      .filter((row) => qs(row, ".amb-check").checked)
+      .map((row) => ({
+        ambienteId: row.dataset.ambiente,
+        area: Number(qs(row, ".amb-input").value) || 0,
+      }));
+
+    return {
+      areaTotal: Number(qs(root, "#areaTotal").value) || 0,
+      padraoId,
+      tipoReformaId: qs(root, "#tipoReformaId").value,
+      complexidadeId: qs(root, "#complexidadeId").value,
+      condicaoImovelId: qs(root, "#condicaoImovelId").value,
+      regiaoId: qs(root, "#regiaoId").value,
+      ambientes: ambientes.length ? ambientes : undefined,
+    };
+  }
+
+  function validar(input) {
+    const erros = {};
+    if (!input.areaTotal || input.areaTotal < 1) erros.areaTotal = true;
+    return erros;
+  }
+
+  function atualizarPreview() {
+    const input = readInput();
+    const erros = validar(input);
+    const faixaEl = qs(root, "#preview-faixa");
+    const detalheEl = qs(root, "#preview-detalhe");
+
+    if (Object.keys(erros).length > 0) {
+      faixaEl.textContent = "—";
+      detalheEl.textContent = "Preencha a área para ver a prévia.";
+      return;
+    }
+    const r = calcular(c, input);
+    faixaEl.textContent = formatFaixa(r.faixa.min, r.faixa.max);
+    detalheEl.textContent = `valor central ${formatBRL(r.total)} · prazo aprox. ${r.cronograma.prazoDias} dias`;
+  }
 
   qsa(root, ".padrao").forEach((btn) => {
     btn.addEventListener("click", () => {
       qsa(root, ".padrao").forEach((b) => b.classList.remove("selected"));
       btn.classList.add("selected");
       padraoId = btn.dataset.padrao;
+      atualizarPreview();
     });
   });
 
@@ -109,28 +159,31 @@ export function renderHome(root, app) {
     check.addEventListener("change", () => {
       area.classList.toggle("hidden", !check.checked);
       row.classList.toggle("selected", check.checked);
+      atualizarPreview();
     });
   });
 
+  // Recalcula a prévia a cada mudança de campo.
+  qsa(root, "input, select").forEach((inp) =>
+    inp.addEventListener("input", atualizarPreview)
+  );
+
+  qs(root, "#areaTotal").addEventListener("input", () => {
+    const erro = qs(root, '[data-erro="areaTotal"]');
+    erro.classList.toggle("hidden", Number(qs(root, "#areaTotal").value) >= 1);
+  });
+
   qs(root, "#calcular").addEventListener("click", () => {
-    const ambientes = qsa(root, ".ambiente")
-      .filter((row) => qs(row, ".amb-check").checked)
-      .map((row) => ({
-        ambienteId: row.dataset.ambiente,
-        area: Number(qs(row, ".amb-input").value) || 0,
-      }));
-
-    const input = {
-      areaTotal: Number(qs(root, "#areaTotal").value) || 0,
-      padraoId,
-      tipoReformaId: qs(root, "#tipoReformaId").value,
-      complexidadeId: qs(root, "#complexidadeId").value,
-      condicaoImovelId: qs(root, "#condicaoImovelId").value,
-      regiaoId: qs(root, "#regiaoId").value,
-      ambientes: ambientes.length ? ambientes : undefined,
-    };
-
+    const input = readInput();
+    const erros = validar(input);
+    if (erros.areaTotal) {
+      qs(root, '[data-erro="areaTotal"]').classList.remove("hidden");
+      qs(root, "#areaTotal").focus();
+      return;
+    }
     saveInput(input);
     app.navigate("#/resultado");
   });
+
+  atualizarPreview();
 }

@@ -49,6 +49,12 @@ function render() {
   document.getElementById("tabela-versao").textContent =
     state.config?.meta?.versaoTabela || "";
 
+  // Tema: aplica a cor da marca como destaque do app (e do PDF)
+  const cor = state.config?.marca?.cor;
+  if (cor && /^#[0-9a-fA-F]{3,8}$/.test(cor)) {
+    document.documentElement.style.setProperty("--accent", cor);
+  }
+
   // Estado ativo da navegação
   document.querySelectorAll("[data-nav]").forEach((a) => {
     a.classList.toggle("active", a.dataset.nav === route);
