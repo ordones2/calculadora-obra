@@ -1,19 +1,17 @@
 // Guarda a última entrada do wizard em sessionStorage para a tela de resultado
-// poder recalcular (inclusive após refresh), sem precisar de backend.
-
-import type { CalcInput } from "../../types/calc";
+// recalcular (inclusive após refresh), sem backend.
 
 const KEY = "calculadora-obra:input";
 
-export function saveInput(input: CalcInput): void {
+export function saveInput(input) {
   sessionStorage.setItem(KEY, JSON.stringify(input));
 }
 
-export function loadInput(): CalcInput | null {
+export function loadInput() {
   const raw = sessionStorage.getItem(KEY);
   if (!raw) return null;
   try {
-    return JSON.parse(raw) as CalcInput;
+    return JSON.parse(raw);
   } catch {
     return null;
   }

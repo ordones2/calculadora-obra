@@ -8,9 +8,30 @@
       name="description"
       content="Estime o custo da sua reforma com faixa de valor, orçamento detalhado e cronograma."
     />
+    <link rel="stylesheet" href="./styles.css" />
   </head>
   <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
+    <header class="topbar no-print">
+      <div class="container topbar-inner">
+        <a href="#/" id="brand" class="brand">Calculadora de Obras</a>
+        <nav class="nav">
+          <a href="#/" data-nav="home">Calculadora</a>
+          <a href="#/admin" data-nav="admin">Admin</a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="container">
+      <div id="view"></div>
+    </main>
+
+    <footer class="footer no-print">
+      <div class="container">
+        Estimativa orientativa — não substitui orçamento executivo. Tabela
+        <span id="tabela-versao"></span>.
+      </div>
+    </footer>
+
+    <script type="module" src="./js/app.js"></script>
   </body>
 </html>
