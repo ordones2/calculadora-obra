@@ -94,23 +94,32 @@ O motor recebe esse objeto + o input do wizard e devolve o resultado.
 
 ## 7. Telas
 
-### Cliente — wizard (`/`) — funil faseado e gamificado (isca de leads)
-Uma pergunta por etapa, com barra de progresso, ícones Lucide (`js/icons.js`), cards
-selecionáveis com auto-avanço e transições. **O preço NÃO aparece aqui.** Etapas:
-1. **Intro** (hero) — "Começar".
-2. **Tipo de reforma** (cards).
-3. **Área total** (input grande + chips).
-4. **Padrão de acabamento** (cards; sem mostrar R$/m²).
-5. **Ambientes** (opcional, multi-seleção + área).
-6. **Detalhes do imóvel** (condição/complexidade/região).
-7. **Itens detalhados** (opcional/avançado, pulável; ativa o nível detalhado).
-8. **Contato — lead gate** (nome*, WhatsApp*, e-mail): libera o resultado.
+### Tema
+Visual **escuro premium** com destaque dourado (variáveis em `styles.css`); o `--accent`
+acompanha a cor da marca (`config.marca.cor`). Ícones finos da biblioteca **Lucide** inline
+(`js/icons.js`). No PDF o `@media print` força tema claro.
 
-### Resultado (`/resultado`) — protegido por gate
-Só acessível após completar o funil + contato (`loadInput()` + `loadLead()`); caso contrário
-redireciona para o início. **Visão enxuta na tela** (isca): saudação com o nome, **faixa**,
-**prazo + curva de desembolso** (S em SVG) e **CTAs** (WhatsApp + baixar PDF). A **quebra de
-custo direto/BDI e orçamento por categoria** vai só para o **PDF** (`.print-only`).
+### Cliente — wizard (`/`) — fluxo "por ambiente", gamificado (isca de leads)
+Inspirado no app de referência (CalcuLar). Barra de progresso, cards com ícone e auto-avanço.
+**O preço NÃO aparece aqui.** Etapas:
+1. **Perfil do imóvel** (hero) — Pequeno/Médio/Grande (pré-configura os ambientes) ou
+   "montar do zero".
+2. **Ambientes** — grade editável (ajustar área, adicionar/remover) já preenchida com
+   tamanhos típicos.
+3. **Padrão de acabamento** (cards; sem mostrar R$/m²).
+4. **Serviços por ambiente** — acordeão por ambiente com serviços sugeridos pré-marcados
+   (define o **escopo** da proposta; não altera os números).
+5. **Sobre a obra** — tipo de reforma, condição, complexidade, região.
+6. **Contato — lead gate** (nome*, WhatsApp*, e-mail): libera o resultado.
+
+O cálculo usa o nível **porAmbiente** (área × R$/m² por padrão, calibrado no admin).
+
+### Resultado (`/resultado`) — protegido por gate, estilo "dossiê"
+Só acessível após completar o funil + contato (`loadInput()` + `loadLead()`); senão
+redireciona para o início. Saudação com o nome, **custo em destaque** (faixa), **"para onde
+vai o investimento"** (barras por ambiente), **cronograma + curva de desembolso** (S em SVG)
+e **CTAs** (WhatsApp + baixar PDF). A **quebra de custo direto/BDI, o investimento por
+ambiente e o escopo de serviços** vão só para o **PDF** (`.print-only`).
 
 ### Admin / CMS (`/admin`)
 - Edição de **marca**, **padrões (R$/m²)**, **BDI**.
