@@ -95,9 +95,8 @@ O motor recebe esse objeto + o input do wizard e devolve o resultado.
 ## 7. Telas
 
 ### Tema
-Visual **escuro premium** com destaque dourado (variáveis em `styles.css`); o `--accent`
-acompanha a cor da marca (`config.marca.cor`). Ícones finos da biblioteca **Lucide** inline
-(`js/icons.js`). No PDF o `@media print` força tema claro.
+Visual **claro** (paleta original areia/bronze); o `--accent` acompanha a cor da marca
+(`config.marca.cor`). Ícones finos da biblioteca **Lucide** inline (`js/icons.js`).
 
 ### Cliente — wizard (`/`) — fluxo "por ambiente", gamificado (isca de leads)
 Inspirado no app de referência (CalcuLar). Barra de progresso, cards com ícone e auto-avanço.
