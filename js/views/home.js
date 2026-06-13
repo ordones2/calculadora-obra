@@ -131,7 +131,7 @@ export function renderHome(root, app) {
         <div class="step-hero">
           <span class="hero-ic">${icon("calculator", { size: 30 })}</span>
           <p class="hero-eyebrow">Calculadora de reforma</p>
-          <h1 class="hero-title">Descubra o investimento da sua reforma</h1>
+          <h1 class="hero-title" tabindex="-1">Descubra o investimento da sua reforma</h1>
           <p class="hero-sub">Em poucos minutos você recebe uma estimativa de custo, prazo e proposta — sem visita técnica. Comece escolhendo o perfil do imóvel:</p>
           <div class="perfil-cards">
             ${Object.entries(PERFIS)
@@ -173,7 +173,7 @@ export function renderHome(root, app) {
           ${respostas.ambientes.map((a) => roomCard(a)).join("")}
         </div>
         <div class="room-add-row">
-          <select id="add-amb">
+          <select id="add-amb" aria-label="Escolher ambiente para adicionar">
             ${c.ambientes.map((a) => `<option value="${esc(a.id)}">${esc(a.nome)}</option>`).join("")}
           </select>
           <button type="button" class="btn-secondary" id="add-room">${icon("plus", { size: 18 })} Adicionar</button>
@@ -254,18 +254,29 @@ export function renderHome(root, app) {
         <div class="form-contato">
           <label class="field">
             <span>${icon("user-round", { size: 16 })} Seu nome</span>
-            <input id="lead-nome" value="${esc(respostas.lead.nome)}" placeholder="Como podemos te chamar?" />
+            <input id="lead-nome" name="nome" autocomplete="name" autocapitalize="words" value="${esc(respostas.lead.nome)}" placeholder="Como podemos te chamar?" />
           </label>
           <label class="field">
             <span>${icon("phone", { size: 16 })} WhatsApp</span>
-            <input id="lead-whatsapp" inputmode="tel" value="${esc(respostas.lead.whatsapp)}" placeholder="(11) 90000-0000" />
+            <input id="lead-whatsapp" name="whatsapp" type="tel" inputmode="tel" autocomplete="tel" value="${esc(respostas.lead.whatsapp)}" placeholder="(11) 90000-0000" />
           </label>
           <label class="field">
             <span>${icon("mail", { size: 16 })} E-mail <span class="muted small">(opcional)</span></span>
-            <input id="lead-email" type="email" value="${esc(respostas.lead.email)}" placeholder="voce@email.com" />
+            <input id="lead-email" name="email" type="email" inputmode="email" autocomplete="email" autocapitalize="off" value="${esc(respostas.lead.email)}" placeholder="voce@email.com" />
           </label>
           <p class="muted small">Usamos seus dados apenas para enviar a estimativa e falar sobre o seu projeto.</p>
         </div>`,
+      wire: () => {
+        // Enter em qualquer campo avança (atalho de teclado no último passo).
+        qsa(root, ".form-contato input").forEach((inp) =>
+          inp.addEventListener("keydown", (e) => {
+            if (e.key === "Enter") {
+              e.preventDefault();
+              avancar(false);
+            }
+          })
+        );
+      },
       commit: () => {
         respostas.lead = {
           nome: qs(root, "#lead-nome").value.trim(),
@@ -296,7 +307,7 @@ export function renderHome(root, app) {
         <span class="room-ic">${icon(iconeAmb(a.ambienteId), { size: 20 })}</span>
         <div class="room-info">
           <div class="room-nome">${esc(a.nome)}</div>
-          <div class="room-area"><input type="number" min="1" value="${esc(a.area)}" /><span>m²</span></div>
+          <div class="room-area"><input type="number" min="1" inputmode="numeric" value="${esc(a.area)}" aria-label="Área de ${esc(a.nome)} em m²" /><span aria-hidden="true">m²</span></div>
         </div>
         <button type="button" class="room-del" data-uid="${a.uid}" aria-label="Remover">${icon("trash-2", { size: 18 })}</button>
       </div>`;
@@ -359,6 +370,8 @@ export function renderHome(root, app) {
       if (erro) {
         const el = qs(root, "#step-erro");
         if (el) el.textContent = erro;
+        // Leva o foco ao primeiro campo/opção do passo para correção imediata.
+        qs(root, ".step-body input, .step-body select, .step-body .option-card, .step-body .perfil-card")?.focus?.();
         return;
       }
     }
@@ -387,7 +400,7 @@ export function renderHome(root, app) {
           step.hero
             ? ""
             : `<div class="progress">
-                 <div class="progress-bar"><span style="width:${pct.toFixed(0)}%"></span></div>
+                 <div class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="${totalCount}" aria-valuenow="${idx}" aria-label="Progresso do formulário, passo ${idx} de ${totalCount}"><span style="width:${pct.toFixed(0)}%"></span></div>
                  <div class="progress-meta">Passo ${idx} de ${totalCount}</div>
                </div>`
         }
@@ -398,13 +411,13 @@ export function renderHome(root, app) {
               : `<div class="step-head">
                    <span class="step-icon">${icon(step.icon, { size: 24 })}</span>
                    <div>
-                     <h1 class="step-title">${esc(step.titulo)}</h1>
+                     <h1 class="step-title" tabindex="-1">${esc(step.titulo)}</h1>
                      ${step.subtitulo ? `<p class="muted">${esc(step.subtitulo)}</p>` : ""}
                    </div>
                  </div>`
           }
           <div class="step-body">${step.body()}</div>
-          <div class="step-erro" id="step-erro"></div>
+          <div class="step-erro" id="step-erro" role="alert" aria-live="assertive"></div>
           ${
             step.avancarOcultar
               ? ""
@@ -436,6 +449,8 @@ export function renderHome(root, app) {
     qs(root, "#avancar")?.addEventListener("click", () => avancar(false));
 
     window.scrollTo(0, 0);
+    // Foco no título do passo: orienta teclado e leitores de tela a cada etapa.
+    qs(root, ".step-title, .hero-title")?.focus?.({ preventScroll: true });
   }
 
   render();

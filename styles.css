@@ -295,6 +295,18 @@ details.card summary { cursor: pointer; font-weight: 600; }
 .btn-link { background: none; border: none; color: var(--danger); cursor: pointer; font-size: 1rem; padding: .2rem .4rem; }
 .btn-link:hover { color: #7f1d1d; }
 
+/* Acessibilidade: foco visível por teclado (não afeta o estado em repouso)
+   e respeito à preferência de reduzir movimento. */
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: .001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
 /* Proposta / impressão */
 .proposta-head { display: none; }
 
