@@ -82,7 +82,7 @@ export function renderResultado(root, app) {
 
       <div class="result-hero no-print">
         <span class="result-ic">${icon("clipboard-check", { size: 28 })}</span>
-        <h1>${primeiroNome ? `${esc(primeiroNome)}, sua estimativa está pronta` : "Sua estimativa está pronta"}</h1>
+        <h1 tabindex="-1">${primeiroNome ? `${esc(primeiroNome)}, sua estimativa está pronta` : "Sua estimativa está pronta"}</h1>
         <p class="muted">Veja o que preparamos com base nos ambientes que você configurou.</p>
       </div>
 
@@ -170,6 +170,8 @@ export function renderResultado(root, app) {
   `;
 
   qs(root, "#imprimir").addEventListener("click", () => window.print());
+  // Foco no título: anuncia o resultado a leitores de tela / teclado.
+  qs(root, ".result-hero h1")?.focus?.({ preventScroll: true });
 }
 
 // Curva "S" de desembolso acumulado (SVG inline, sem dependências).
