@@ -115,7 +115,8 @@ O motor recebe esse objeto + o input do wizard e devolve o resultado.
   por ambiente), resultado, PDF via impressão, admin (marca/padrões/BDI + editor JSON).
 - **Fase 1 — MVP (entregue)**: validações no wizard, prévia da estimativa ao vivo, tema com a
   cor da marca, logo e cor no PDF (impressão).
-- **Fase 2**: edição estruturada de ambientes e serviços no admin (sem JSON cru).
+- **Fase 2 (entregue)**: edição estruturada de ambientes e serviços no admin (tabelas com
+  adicionar/remover), sem precisar editar JSON cru.
 - **Fase 3**: nível "itens detalhados" na UI do cliente + sugestão de quantidades por
   ambiente; gráfico da curva de desembolso.
 - **Fase 4**: captura de lead com backend/CRM, autenticação do admin, multiusuário e/ou CMS
@@ -131,6 +132,11 @@ npm run dev        # python3 -m http.server 5173  → http://localhost:5173
 # ou: npx serve .  /  qualquer hospedagem estática
 npm test           # node --test (test runner nativo, sem dependências)
 ```
+
+**Publicação (GitHub Pages):** há um workflow em `.github/workflows/pages.yml` que publica o
+site. É necessário habilitar o Pages uma única vez em *Settings → Pages → Source = GitHub
+Actions* (o token do Actions não pode habilitar sozinho). URL:
+`https://ordones2.github.io/calculadora-obra/`.
 
 Checklist de verificação:
 1. Wizard calcula e leva a `#/resultado` com faixa, orçamento e cronograma.
