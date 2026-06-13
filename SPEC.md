@@ -99,7 +99,8 @@ O motor recebe esse objeto + o input do wizard e devolve o resultado.
 2. **Padrão de acabamento**: cards econômico/médio/alto/luxo.
 3. **Ambientes** (opcional): seleção + área por ambiente.
 4. **Itens detalhados** (opcional/avançado — *fase futura na UI*).
-5. **Resultado** (`/resultado`): faixa, orçamento, cronograma, PDF e contato.
+5. **Prévia ao vivo**: faixa estimada atualizada conforme o cliente preenche.
+6. **Resultado** (`/resultado`): faixa, orçamento, cronograma, PDF e contato.
 
 ### Admin / CMS (`/admin`)
 - Edição de **marca**, **padrões (R$/m²)**, **BDI**.
@@ -112,7 +113,8 @@ O motor recebe esse objeto + o input do wizard e devolve o resultado.
 - **Fase 0 — Esqueleto (entregue)**: estrutura HTML/CSS/JS, seed, motor de cálculo + testes,
   store de config (seed + localStorage + export/import), wizard funcional (estimativa rápida +
   por ambiente), resultado, PDF via impressão, admin (marca/padrões/BDI + editor JSON).
-- **Fase 1 — MVP**: refinar UX do wizard, validações, PDF com logo/cores da marca.
+- **Fase 1 — MVP (entregue)**: validações no wizard, prévia da estimativa ao vivo, tema com a
+  cor da marca, logo e cor no PDF (impressão).
 - **Fase 2**: edição estruturada de ambientes e serviços no admin (sem JSON cru).
 - **Fase 3**: nível "itens detalhados" na UI do cliente + sugestão de quantidades por
   ambiente; gráfico da curva de desembolso.
